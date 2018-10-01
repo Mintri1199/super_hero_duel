@@ -2,7 +2,8 @@ import random
 
 
 class Hero:
-
+    # Implement battle damage priority attribute
+    # Implement steal function and attributes
     def __init__(self, name, health=100):
         # All of the lists will hold objects
         self.name = name
@@ -12,11 +13,13 @@ class Hero:
         self.health = health
         self.deaths = 0
         self.kills = 0
+        self.damage_priority = True
+        self.steal = True
 
     def add_ability(self, ability_name):
         self.abilities.append(ability_name)
 
-    # Adding all the attack strength of the Ability objects that passed in.
+    # Adding all the attack strength of the Ability objects in the abilities list.
     def attack(self):
         total_strength = 0
 
@@ -164,6 +167,18 @@ class Armor:
     def defend(self):
         return random.randint(0, self.defense)
 
+class Steal:
+    def __init__(self, thief, other_team):
+        self.victim = random.choice(other_team.heroes)
+        self.thief = thief
+
+
+    # This function will allow the hero to steal from the victim
+    def stealing(self):
+        stolen_item = self.victim.abilities.pop(random.randint(0, len(self.victim.abilities) - 1))
+        self.thief.add_abilities(stolen_item)
+
+
 
 class Arena:
 
@@ -204,8 +219,16 @@ class Arena:
     def multiple_abilities(self, number_of_abilities):
         for ability in range(0, number_of_abilities):
             ability_name = input("What is this ability name? ")
-            ability_power = input("How strong is this ability? \nNumerical input: ")
+            ability_power = input("How strong is this ability?\nNumerical input: ")
             self.hero.add_ability(Ability(ability_name, ability_power))
+
+    # Handle adding weapons
+    def multiple_weapons(self, number_of_weapons):
+        for weapon in range(0, number_of_weapons):
+            weapon_name = input("What is this ability name? ")
+            weapon_power =  input("How strong is this weapon?\n Numerical input: ")
+            self.hero.add_ability(Weapon(weapon_name, weapon_power))
+
 
     # Handle adding armors for hero builder
     def multiple_armors(self, number_of_armors):
@@ -267,7 +290,13 @@ class Arena:
     def team_battle(self):
         team_one_died = 0
         team_two_died = 0
+
+        # Check if the two teams can kill each other
+        # if self.team_one.attack(self.team_two) and self.team_two.attack(self.team_one) != 0{}
         while team_one_died != len(self.team_one.heroes) and team_two_died != len(self.team_two.heroes):
+
+            # Implement
+
             self.team_one.attack(self.team_two)
 
             for hero in self.team_two.heroes:
@@ -283,6 +312,9 @@ class Arena:
         self.team_one.update_kills()
         self.team_two.update_kills()
 
+        # If both them can't kill each other
+        # print("Both teams can't damage each other")
+
     def show_stats(self):
         self.team_one.stats()
         self.team_two.stats()
@@ -297,4 +329,7 @@ class Arena:
 #    hero.add_ability(new_ability)
 #    print(hero.attack())
 
+newArena = Arena()
 
+# Running the program because Zurich told me to
+newArena.run()
